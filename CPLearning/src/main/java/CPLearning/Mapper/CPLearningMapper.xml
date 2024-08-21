@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CPLearning.Mapper.CPLearningMapper">
+	<select id="studentLogin" resultType="CPLearning.Entity.StudentInfo">
+		SELECT * FROM STUDENTINFO
+		WHERE STUDENTNO = #{studentNo} AND PASSWORD = #{password}
+	</select>
+
+	<select id="selectLoginHistory" resultType="CPLearning.Entity.StudentInfo">
+		SELECT * FROM LOGINHISTORY
+		WHERE STUDENTNO=#{studentNo}
+		ORDER BY LOGINTIME DESC
+	</select>
+
+	<insert id="insertLoginHistory" parameterType="CPLearning.Entity.StudentInfo">
+		INSERT INTO LOGINHISTORY
+		VALUES (#{studentNo}, #{loginIP}, TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
+	</insert>
+	
+	<select id="getProblemType" resultType="CPLearning.Entity.ProblemInfo">
+		SELECT WEEK, PROBLEMTYPE FROM PROBLEMINFO
+		WHERE USEYN = 'Y'
+		GROUP BY WEEK, PROBLEMTYPE
+		ORDER BY WEEK, PROBLEMTYPE
+	</select>
+	
+	<select id="getProblemList" resultType="CPLearning.Entity.ProblemInfo">
+		SELECT * FROM PROBLEMINFO
+		WHERE USEYN = 'Y'
+		AND WEEK = #{week}
+		AND PROBLEMTYPE = #{problemType}
+		ORDER BY PROBLEMNO
+	</select>
+	
+	<select id="getProblemInfo" resultType="CPLearning.Entity.ProblemInfo">
+		SELECT * FROM PROBLEMINFO
+		WHERE PROBLEMNO = #{problemNo}
+	</select>
+	
+	<insert id="insertProblemInfo" parameterType="CPLearning.Entity.ProblemInfo">
+		INSERT INTO PROBLEMINFO (
+			PROBLEMNO, PROBLEMTYPE, PROBLEMCONT, PROBLEMCODE, ANSWERCODE,
+			TESTCASE, PROBLEMLEVEL, HINT, USEYN, WEEK
+		) VALUES (
+			#{problemNo}, #{problemType}, #{problemCont}, #{problemCode}, #{answerCode},
+		 	#{testCase}, #{problemLevel}, #{hint}, 'Y', #{week}
+		)
+	</insert>
+	
+	<select id="getProfProblemInfo" resultType="CPLearning.Entity.ProblemInfo">
+		SELECT * FROM PROBLEMINFO
+		WHERE 1 = 1
+		<if test="problemLevel != null and problemLevel != '' ">
+		AND PROBLEMLEVEL = #{problemLevel}
+		</if>
+		ORDER BY PROBLEMNO
+	</select>
+	
+	<insert id="insertSubmitHistory" parameterType="CPLearning.Entity.SubmitHistory">
+		INSERT INTO SUBMITHISTORY (
+			STUDENTNO, PROBLEMTYPE, PROBLEMNO, SUBMITTIME, SUBMITCOUNT,
+			SUBMITCONT, SCORE, FEEDBACK
+		) VALUES (
+			#{studentNo}, #{problemType}, #{problemNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), #{submitCount},
+		 	#{submitCont}, #{score}, #{feedback}
+		)
+	</insert>
+	
+	<select id="getSubmitHistory" resultType="CPLearning.Entity.SubmitHistory">
+		SELECT * FROM SUBMITHISTORY
+		WHERE 1 = 1
+		<if test="studentNo != null and studentNo != '' ">
+		AND STUDENTNO = #{studentNo}
+		</if>
+		<if test="problemNo != null and problemNo != '' ">
+		AND PROBLEMNO = #{problemNo}
+		</if>
+		ORDER BY SUBMITTIME DESC
+	</select>
+	
+	<select id="getSubmitCount" parameterType="CPLearning.Entity.SubmitHistory">
+		SELECT COUNT(*) FROM SUBMITHISTORY
+		WHERE 1 = 1
+		<if test="studentNo != null and studentNo != '' ">
+		AND STUDENTNO = #{studentNo}
+		</if>
+		<if test="problemNo != null and problemNo != '' ">
+		AND PROBLEMNO = #{problemNo}
+		</if>
+	</select>
+</mapper>
