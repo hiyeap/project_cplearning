@@ -22,7 +22,7 @@ public class CPLearningController {
 	public String getApiKey(HttpServletRequest request) {
 		
 		String apiKey = CPLearning.getApiKey();
-		System.out.println("#####" + apiKey + "#####");
+		//System.out.println("#####" + apiKey + "#####");
 		return apiKey;
 	}
 
@@ -96,7 +96,7 @@ public class CPLearningController {
 		
 		System.out.println("##### insertSubmitHistory ##### " + SubmitHistory);
 		
-		String submitCount = String.valueOf(CPLearning.getSubmitCount(SubmitHistory));
+		String submitCount = String.valueOf(CPLearning.getSubmitCount(SubmitHistory)+1);
 		SubmitHistory.setSubmitCount(submitCount);
 		
 		int cnt = CPLearning.insertSubmitHistory(SubmitHistory);

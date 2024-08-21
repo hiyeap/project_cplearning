@@ -85,7 +85,7 @@
 		ORDER BY SUBMITTIME DESC
 	</select>
 	
-	<select id="getSubmitCount" parameterType="CPLearning.Entity.SubmitHistory">
+	<select id="getSubmitCount" parameterType="CPLearning.Entity.SubmitHistory" resultType="int">
 		SELECT COUNT(*) FROM SUBMITHISTORY
 		WHERE 1 = 1
 		<if test="studentNo != null and studentNo != '' ">

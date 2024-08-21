@@ -424,8 +424,8 @@
      var studentCode = document.getElementById('studentCode').value;
      var testCase = thisProblemInfo.testCase;
      var submitCont = '문제는 ' + problemCont + '이고, 테스트케이스는 ' + testCase +'이고, 입력한 답은 ' + studentCode + '입니다';
-     submitCont += '학생의 코드를 돌려 테스트케이스와 비교하여 점수를 알려주고, 학생의 코드에 대한 피드백을 해주세요.';
-     submitCont += '점수와 피드백을 --- 라는 기호로 구분하여 알려주세요';
+     submitCont += '학생의 코드를 돌려 테스트케이스와 비교하여 점수와 학생의 코드에 대한 피드백을 해주세요.';
+     submitCont +='점수는 100점이 만점으로 하여야 하고, 피드백 시에는 올바른 코드를 알려줘서는 안되며, 순서대로 점수---피드백 이렇게 --- 기호를 넣어서 구분해주세요.';
      
      $('#studentLoading').show();
 
@@ -452,7 +452,7 @@
      }).then(function (response) {
        $('#studentLoading').hide();
        
-       var gptAnswer = esponse.choices[0].message.content;
+       var gptAnswer = response.choices[0].message.content;
        document.getElementById('feedback').value = gptAnswer;
        
        thisSubmitInfo.studentCode = studentCode;
