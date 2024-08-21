@@ -263,7 +263,7 @@
 	}
 	
  function fncMakeProblemChatGPT() {
-      var api_key = "sk-None-W3gQN9ecD0wgklhP1AAKT3BlbkFJysuR5jJBJobemisAIbWR";  // <- API KEY 입력
+      var api_key = "";  // <- API KEY 입력
       $('#profLoading').show();
 
       var messages = [
@@ -396,7 +396,7 @@
  }
  
  function fncSubmitProblemChatGPT() {
-     var api_key = "sk-None-W3gQN9ecD0wgklhP1AAKT3BlbkFJysuR5jJBJobemisAIbWR";  // <- API KEY 입력
+     var api_key = "";  // <- API KEY 입력
      var problemCont = document.getElementById('problemCont').value;
      var studentCode = document.getElementById('studentCode').value;
      var testCase = thisProblemInfo.testCase;
