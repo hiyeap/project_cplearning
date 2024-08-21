@@ -19,6 +19,23 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript"></script>
 <script>
+	var gpt_api_key = "";
+
+	// fetch를 사용하여 텍스트 파일을 가져옴
+	fetch('./gpt_api_key') // 상대 경로로 파일 접근
+	    .then(response => {
+	        if (!response.ok) {
+	            throw new Error('Network response was not ok');
+	        }
+	        return response.text(); // 텍스트 형태로 변환
+	    })
+	    .then(data => {
+	        gpt_api_key = data; // gpt_api_key 를 저장
+	    })
+	    .catch(error => {
+	        console.error('There was a problem with the fetch operation:', error);
+	    });
+
 	var makeProblemCondition = `
 	
 	C++ 프로그래밍 문제를 생성해주세요.
@@ -263,7 +280,6 @@
 	}
 	
  function fncMakeProblemChatGPT() {
-      var api_key = "";  // <- API KEY 입력
       $('#profLoading').show();
 
       var messages = [
@@ -282,7 +298,7 @@
         url: "https://api.openai.com/v1/chat/completions",
         method: 'POST',
         headers: {
-          Authorization: "Bearer " + api_key,
+          Authorization: "Bearer " + gpt_api_key,
           'Content-Type': 'application/json',
         },
         data: JSON.stringify(data),
@@ -396,13 +412,12 @@
  }
  
  function fncSubmitProblemChatGPT() {
-     var api_key = "";  // <- API KEY 입력
      var problemCont = document.getElementById('problemCont').value;
      var studentCode = document.getElementById('studentCode').value;
      var testCase = thisProblemInfo.testCase;
      var submitCont = '문제는 ' + problemCont + '이고, 테스트케이스는 ' + testCase +'이고, 입력한 답은 ' + studentCode + '입니다';
      submitCont += '학생의 코드를 돌려 테스트케이스와 비교하여 점수를 알려주고, 학생의 코드에 대한 피드백을 해주세요.';
-     submitCont += '점수와 피드백을 --- 라는 기호로 구분하여 알려주세요'
+     submitCont += '점수와 피드백을 --- 라는 기호로 구분하여 알려주세요';
      
      $('#studentLoading').show();
 
@@ -422,7 +437,7 @@
        url: "https://api.openai.com/v1/chat/completions",
        method: 'POST',
        headers: {
-         Authorization: "Bearer " + api_key,
+         Authorization: "Bearer " + gpt_api_key,
          'Content-Type': 'application/json',
        },
        data: JSON.stringify(data),
