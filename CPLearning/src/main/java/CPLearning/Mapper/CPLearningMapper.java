@@ -30,4 +30,6 @@ public interface CPLearningMapper {
 	
 	public int getSubmitCount(SubmitHistory submitHistory);
 
+	public String getApiKey();
+
 }

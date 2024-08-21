@@ -20,21 +20,29 @@
 <script type="text/javascript"></script>
 <script>
 	var gpt_api_key = "";
+	
+    // load 이벤트 리스너
+    window.addEventListener('load', function() {
+		// 2. ajax
+		$.ajax({
+			url : "${cpath}/getApiKey",
+			type : "post",
+			data : {
+				// 보내줄 데이터 없음 
+			},
+			success : function(res) {
+				if (res) {
+					gpt_api_key = res;
+				}
+				
+			
+			},
+			error : function() {
+				alert("getApiKey error");
+			}
+		})
+    });
 
-	// fetch를 사용하여 텍스트 파일을 가져옴
-	fetch('./gpt_api_key') // 상대 경로로 파일 접근
-	    .then(response => {
-	        if (!response.ok) {
-	            throw new Error('Network response was not ok');
-	        }
-	        return response.text(); // 텍스트 형태로 변환
-	    })
-	    .then(data => {
-	        gpt_api_key = data; // gpt_api_key 를 저장
-	    })
-	    .catch(error => {
-	        console.error('There was a problem with the fetch operation:', error);
-	    });
 
 	var makeProblemCondition = `
 	

@@ -17,6 +17,14 @@ import CPLearning.Mapper.CPLearningMapper;
 public class CPLearningController {
 	@Autowired
 	private CPLearningMapper CPLearning;
+	
+	@PostMapping("/getApiKey")
+	public String getApiKey(HttpServletRequest request) {
+		
+		String apiKey = CPLearning.getApiKey();
+		System.out.println("#####" + apiKey + "#####");
+		return apiKey;
+	}
 
 	@PostMapping("/login")
 	public StudentInfo studentLogin(StudentInfo StudentInfo, HttpServletRequest request) {
