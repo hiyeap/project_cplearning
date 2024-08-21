@@ -423,9 +423,10 @@
      var problemCont = document.getElementById('problemCont').value;
      var studentCode = document.getElementById('studentCode').value;
      var testCase = thisProblemInfo.testCase;
-     var submitCont = '문제는 ' + problemCont + '이고, 테스트케이스는 ' + testCase +'이고, 입력한 답은 ' + studentCode + '입니다';
-     submitCont += '학생의 코드를 돌려 테스트케이스와 비교하여 점수와 학생의 코드에 대한 피드백을 해주세요.';
-     submitCont +='점수는 100점이 만점으로 하여야 하고, 피드백 시에는 올바른 코드를 알려줘서는 안되며, 순서대로 점수---피드백 이렇게 --- 기호를 넣어서 구분해주세요.';
+     var submitCont = '문제는 ' + problemCont + '이고, 학생이 입력한 코드는 ' + studentCode + '입니다.' + testCase + '위와 같이 테스트케이스는 각각 입력 => 출력의 형태로 담겨 있습니다. 학생이 입력한 코드를 실행하여 테스트케이스를 기반으로 점수와 피드백을 알려주세요.';
+     submitCont +='점수는 0에서 100 사이 정수로 말해주세요. 예를 들면 테스트케이스 10개 중 10개를 맞혔을 경우 100, 2개를 맞혔을 경우 20 입니다.';
+     submitCont +='피드백은 테스트케이스를 알려주거나, 올바른 코드를 알려주거나, 수정해줘서는 안됩니다. 학생의 코드의 문제점에 대한 힌트를 말해주면 됩니다.';
+     submitCont +='답변의 내용은 점수와 피드백 항목을 순서대로 ---을 구분값으로 하여 점수---피드백 형식을 지켜주세요.';
      
      $('#studentLoading').show();
 
@@ -453,12 +454,11 @@
        $('#studentLoading').hide();
        
        var gptAnswer = response.choices[0].message.content;
-       document.getElementById('feedback').value = gptAnswer;
-       
-       thisSubmitInfo.studentCode = studentCode;
-    	   
        var tempSubmitInfo = gptAnswer.split('---');
        
+       thisSubmitInfo.studentCode = studentCode;
+       
+       document.getElementById('gptFeedback').value = tempSubmitInfo;
        thisSubmitInfo.score = tempSubmitInfo[0];
        thisSubmitInfo.feedback = tempSubmitInfo[1];
        
@@ -558,7 +558,7 @@
 					<div class="loading" id="studentLoading">
 					  <img src="https://studentrights.sen.go.kr/images/common/loading.gif">
 					</div>
-					<div id="feedback"></div>    
+					<div><textarea id="gptFeedback" name="gptFeedback" cols="50" rows="3"></textarea></div>    
 		        </div>
 	    	</div>
 	
