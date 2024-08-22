@@ -1,6 +1,7 @@
 package CPLearning.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import CPLearning.Entity.ApiKeyInfo;
 import CPLearning.Entity.ProblemInfo;
 import CPLearning.Entity.StudentInfo;
 import CPLearning.Entity.SubmitHistory;
@@ -19,11 +21,11 @@ public class CPLearningController {
 	private CPLearningMapper CPLearning;
 	
 	@PostMapping("/getApiKey")
-	public String getApiKey(HttpServletRequest request) {
+	public List<ApiKeyInfo> getApiKey(HttpServletRequest request) {
 		
-		String apiKey = CPLearning.getApiKey();
-		//System.out.println("#####" + apiKey + "#####");
-		return apiKey;
+		List<ApiKeyInfo> ApiKeyInfo = CPLearning.getApiKey();
+		System.out.println("#####" + ApiKeyInfo + "#####");
+		return ApiKeyInfo;
 	}
 
 	@PostMapping("/login")

@@ -20,9 +20,10 @@
 <script type="text/javascript"></script>
 <script>
 	var gpt_api_key = "";
+	var replit_api_key = "";
 	
-    // load 이벤트 리스너
-    window.addEventListener('load', function() {
+	// load 이벤트 리스너
+	window.addEventListener('load', function() {
 		// 2. ajax
 		$.ajax({
 			url : "${cpath}/getApiKey",
@@ -32,7 +33,13 @@
 			},
 			success : function(res) {
 				if (res) {
-					gpt_api_key = res;
+					for(var i = 0; i < res.length; i++){
+						if(res[i].apiName == 'chatGPT'){
+							gpt_api_key = res[i].apiKey;
+						} else if(res[i].apiName == 'replit'){
+							replit_api_key = res[i].apiKey;
+						}
+					}
 				}
 				
 			
@@ -41,7 +48,7 @@
 				alert("getApiKey error");
 			}
 		})
-    });
+	});
 
 
 	var makeProblemCondition = `
@@ -67,19 +74,19 @@
 		using namespace std;
 
 		int minimizeDifference(vector<int>& arr, int k) {
-		    // 여기에 코드를 작성하세요.
+			// 여기에 코드를 작성하세요.
 		}
 
 		int main() {
-		    int n, k;
-		    cin >> n >> k;
-		    vector<int> arr(n);
-		    for (int i = 0; i < n; ++i) {
-		        cin >> arr[i];
-		    }
+			int n, k;
+			cin >> n >> k;
+			vector<int> arr(n);
+			for (int i = 0; i < n; ++i) {
+			cin >> arr[i];
+			}
 
-		    cout << minimizeDifference(arr, k) << endl;
-		    return 0;
+			cout << minimizeDifference(arr, k) << endl;
+			return 0;
 		}
 		---
 		cpp
@@ -90,29 +97,29 @@
 		using namespace std;
 
 		int minimizeDifference(vector<int>& arr, int k) {
-		    sort(arr.begin(), arr.end());
-		    int n = arr.size();
-		    int minDiff = arr[n-1] - arr[0];
-		    
-		    for (int i = 0; i <= k; ++i) {
-		        int low = arr[i];
-		        int high = arr[n - 1 - (k - i)];
-		        minDiff = min(minDiff, high - low);
-		    }
+			sort(arr.begin(), arr.end());
+			int n = arr.size();
+			int minDiff = arr[n-1] - arr[0];
+		
+			for (int i = 0; i <= k; ++i) {
+				int low = arr[i];
+				int high = arr[n - 1 - (k - i)];
+				minDiff = min(minDiff, high - low);
+			}
 
-		    return minDiff;
+			return minDiff;
 		}
 
 		int main() {
-		    int n, k;
-		    cin >> n >> k;
-		    vector<int> arr(n);
-		    for (int i = 0; i < n; ++i) {
-		        cin >> arr[i];
-		    }
+			int n, k;
+			cin >> n >> k;
+			vector<int> arr(n);
+			for (int i = 0; i < n; ++i) {
+				cin >> arr[i];
+			}
 
-		    cout << minimizeDifference(arr, k) << endl;
-		    return 0;
+			cout << minimizeDifference(arr, k) << endl;
+			return 0;
 		}
 		---
 		5 2 1 3 6 4 8 => 2 
@@ -207,7 +214,7 @@
 						
 						problemType += "<li><a href='javascript:fncGetProblemList(" + res[i].week + "," + res[i].problemType + ")'>" + res[i].week + "주차" + problemTypeName + "문제</a></li>";
 					}
-			        
+					
 					problemType += "</ul>";
 					
 					
@@ -244,9 +251,8 @@
 					for(var i = 0; i < res.length; i++){
 						problemList += "<li><a href='javascript:fncGetProblemInfo(" + res[i].problemNo + ")'>" + (i + 1) + "번째 문제</a></li>";
 					}
-			        
-					problemList += "</ul>";
 					
+					problemList += "</ul>";
 					
 					$("#problemList").html(problemList);
 				}
@@ -287,186 +293,186 @@
 		})
 	}
 	
- function fncMakeProblemChatGPT() {
-      $('#profLoading').show();
+function fncMakeProblemChatGPT() {
+	$('#profLoading').show();
 
-      var messages = [
-        { role: 'system', content:  makeProblemCondition + '난이도가 ' + $('#setProblemLevel option:selected').val() + '으로 해주세요.' + makeProblemExample },
-        { role: 'user', content : '' },
-      ]
+	var messages = [
+		{ role: 'system', content:  makeProblemCondition + '난이도가 ' + $('#setProblemLevel option:selected').val() + '으로 해주세요.' + makeProblemExample },
+		{ role: 'user', content : '' },
+	]
+	
+	var data = {
+		model: 'gpt-3.5-turbo',
+		temperature: 0.7,
+		n: 1,
+		messages: messages,
+	}
+	
+	$.ajax({
+		url: "https://api.openai.com/v1/chat/completions",
+		method: 'POST',
+		headers: {
+			'Authorization': "Bearer " + gpt_api_key,
+			'Content-Type': 'application/json',
+		},
+		data: JSON.stringify(data),
+	}).then(function (response) {
+		$('#profLoading').hide();
+		
+		var insertProblemInfo = response.choices[0].message.content;
+		if(confirm(insertProblemInfo)){
+			fncInsertProblem(insertProblemInfo);
+		}
+	
+	});
+}
 
-      var data = {
-        model: 'gpt-3.5-turbo',
-        temperature: 0.7,
-        n: 1,
-        messages: messages,
-      }
 
-      $.ajax({
-        url: "https://api.openai.com/v1/chat/completions",
-        method: 'POST',
-        headers: {
-          Authorization: "Bearer " + gpt_api_key,
-          'Content-Type': 'application/json',
-        },
-        data: JSON.stringify(data),
-      }).then(function (response) {
-        $('#profLoading').hide();
-        
-        var insertProblemInfo = response.choices[0].message.content;
-        if(confirm(insertProblemInfo)){
-        	fncInsertProblem(insertProblemInfo);
-        }
-
-      });
-    }
-
- 
 	function fncInsertProblem(insertProblemInfo){
-	 
-	 var tempProblemInfo = insertProblemInfo.split('---');
-	 
-	 var tempProblemLevel = tempProblemInfo[0];
-	 var tempProblemCont = tempProblemInfo[1];
-	 var tempProblemCode = tempProblemInfo[2];
-	 var tempAnswerCode = tempProblemInfo[3];
-	 var tempTestCase = tempProblemInfo[4];
-	 var tempHint = tempProblemInfo[5];
-	 
-	$.ajax({
-		url : "${cpath}/insertProblemInfo",
-		type : "post",
-		data : {
-			"week" :  $('#setWeek option:selected').text(),
-			"problemNo" :  allProblemCnt+1,
-			"problemLevel" : tempProblemLevel,
-			"problemType" : $('#setProblemType option:selected').val(),
-			"problemCont" : tempProblemCont,
-			"problemCode" : tempProblemCode,
-			"answerCode" : tempAnswerCode,
-			"testCase" : tempTestCase,
-			"hint" : tempHint
-		},
-		success : function(res) {
-			if (res) {
-				// 문제를 등록했으니 전체 문제 리스트를 재조회 
-				fncGetProfProblemInfo();
-			}
-			
+	
+		var tempProblemInfo = insertProblemInfo.split('---');
 		
-		},
-		error : function() {
-			alert("fncInsertProblem error");
-		}
-	})
- }
- 
- function fncGetProfProblemInfo(){
-	$.ajax({
-		url : "${cpath}/getProfProblemInfo",
-		type : "post",
-		data : {
-			// 추후 난이도별, 주차별 조회 등 추가 필요
-		},
-		success : function(res) {
-			if (res) {
-				var profProblemInfo = "<table>";
-				
-				profProblemInfo+="<tr>";
-				profProblemInfo+="<th>문제번호</th>";
-				profProblemInfo+="<th>주차</th>";
-				profProblemInfo+="<th>문제타입</th>";
-				profProblemInfo+="<th>문제난이도</th>";
-				profProblemInfo+="<th>문제설명</th>";
-				profProblemInfo+="<th>문제코드</th>";
-				profProblemInfo+="<th>정답코드</th>";
-				profProblemInfo+="<th>테스트케이스</th>";
-				profProblemInfo+="<th>문제힌트</th>";
-				profProblemInfo+="<th>제출기한</th>";
-				profProblemInfo+="<th>사용여부</th>";
-				profProblemInfo+="</tr>";
-				
-				for(var i = 0; i < res.length; i++){
-					profProblemInfo+="<tr>";
-					profProblemInfo+="<td>" + res[i].problemNo + "</td>";
-					profProblemInfo+="<td>" + res[i].week + "</td>";
-					profProblemInfo+="<td>" + res[i].problemType + "</td>";
-					profProblemInfo+="<td>" + res[i].problemLevel + "</td>";
-					profProblemInfo+="<td>" + res[i].problemCont + "</td>";
-					profProblemInfo+="<td>" + res[i].problemCode + "</td>";
-					profProblemInfo+="<td>" + res[i].answerCode + "</td>";
-					profProblemInfo+="<td>" + res[i].testCase + "</td>";
-					profProblemInfo+="<td>" + res[i].hint + "</td>";
-					profProblemInfo+="<td>" + res[i].dueDate + "</td>";
-					profProblemInfo+="<td>" + res[i].useYn + "</td>";
-					profProblemInfo+="</tr>";
+		var tempProblemLevel = tempProblemInfo[0];
+		var tempProblemCont = tempProblemInfo[1];
+		var tempProblemCode = tempProblemInfo[2];
+		var tempAnswerCode = tempProblemInfo[3];
+		var tempTestCase = tempProblemInfo[4];
+		var tempHint = tempProblemInfo[5];
+		
+		$.ajax({
+			url : "${cpath}/insertProblemInfo",
+			type : "post",
+			data : {
+				"week" :  $('#setWeek option:selected').text(),
+				"problemNo" :  allProblemCnt+1,
+				"problemLevel" : tempProblemLevel,
+				"problemType" : $('#setProblemType option:selected').val(),
+				"problemCont" : tempProblemCont,
+				"problemCode" : tempProblemCode,
+				"answerCode" : tempAnswerCode,
+				"testCase" : tempTestCase,
+				"hint" : tempHint
+			},
+			success : function(res) {
+				if (res) {
+					// 문제를 등록했으니 전체 문제 리스트를 재조회 
+					fncGetProfProblemInfo();
 				}
-		        
-				profProblemInfo += "<//table>";
 				
-				
-				$("#profProblemInfo").html(profProblemInfo);
-				
-				allProblemCnt = res.length;
-				
-			}
 			
-		
-		},
-		error : function() {
-			alert("fncInsertProblem error");
+			},
+			error : function() {
+				alert("fncInsertProblem error");
+			}
+		})
+	}
+ 
+	function fncGetProfProblemInfo(){
+		$.ajax({
+			url : "${cpath}/getProfProblemInfo",
+			type : "post",
+			data : {
+				// 추후 난이도별, 주차별 조회 등 추가 필요
+			},
+			success : function(res) {
+				if (res) {
+					var profProblemInfo = "<table>";
+					
+					profProblemInfo+="<tr>";
+					profProblemInfo+="<th>문제번호</th>";
+					profProblemInfo+="<th>주차</th>";
+					profProblemInfo+="<th>문제타입</th>";
+					profProblemInfo+="<th>문제난이도</th>";
+					profProblemInfo+="<th>문제설명</th>";
+					profProblemInfo+="<th>문제코드</th>";
+					profProblemInfo+="<th>정답코드</th>";
+					profProblemInfo+="<th>테스트케이스</th>";
+					profProblemInfo+="<th>문제힌트</th>";
+					profProblemInfo+="<th>제출기한</th>";
+					profProblemInfo+="<th>사용여부</th>";
+					profProblemInfo+="</tr>";
+					
+					for(var i = 0; i < res.length; i++){
+						profProblemInfo+="<tr>";
+						profProblemInfo+="<td>" + res[i].problemNo + "</td>";
+						profProblemInfo+="<td>" + res[i].week + "</td>";
+						profProblemInfo+="<td>" + res[i].problemType + "</td>";
+						profProblemInfo+="<td>" + res[i].problemLevel + "</td>";
+						profProblemInfo+="<td>" + res[i].problemCont + "</td>";
+						profProblemInfo+="<td>" + res[i].problemCode + "</td>";
+						profProblemInfo+="<td>" + res[i].answerCode + "</td>";
+						profProblemInfo+="<td>" + res[i].testCase + "</td>";
+						profProblemInfo+="<td>" + res[i].hint + "</td>";
+						profProblemInfo+="<td>" + res[i].dueDate + "</td>";
+						profProblemInfo+="<td>" + res[i].useYn + "</td>";
+						profProblemInfo+="</tr>";
+					}
+			
+					profProblemInfo += "<//table>";
+					
+					
+					$("#profProblemInfo").html(profProblemInfo);
+					
+					allProblemCnt = res.length;
+					
+				}
+				
+			
+			},
+			error : function() {
+				alert("fncInsertProblem error");
+			}
+		})
+	}
+ 
+	function fncSubmitProblemChatGPT() {
+		var problemCont = document.getElementById('problemCont').value;
+		var studentCode = document.getElementById('studentCode').value;
+		var testCase = thisProblemInfo.testCase;
+		var submitCont = '문제는 ' + problemCont + '이고, 학생이 입력한 코드는 ' + studentCode + '입니다.' + testCase + '위와 같이 테스트케이스는 각각 입력 => 출력의 형태로 담겨 있습니다. 학생이 입력한 코드를 실행하여 테스트케이스를 기반으로 점수와 피드백을 알려주세요.';
+		submitCont +='점수는 0에서 100 사이 정수로 말해주세요. 예를 들면 테스트케이스 10개 중 10개를 맞혔을 경우 100, 2개를 맞혔을 경우 20 입니다.';
+		submitCont +='피드백은 테스트케이스를 알려주거나, 올바른 코드를 알려주거나, 수정해줘서는 안됩니다. 학생의 코드의 문제점에 대한 힌트를 말해주면 됩니다.';
+		submitCont +='답변의 내용은 점수와 피드백 항목을 순서대로 ---을 구분값으로 하여 점수---피드백 형식을 지켜주세요.';
+	
+		$('#studentLoading').show();
+	
+		var messages = [
+			{ role: 'system', content: submitCont },
+			{ role: 'user', content: ''},
+		]
+	
+		var data = {
+			model: 'gpt-3.5-turbo',
+			temperature: 0.5,
+			n: 1,
+			messages: messages,
 		}
-	})
- }
+	
+		$.ajax({
+			url: "https://api.openai.com/v1/chat/completions",
+			method: 'POST',
+			headers: {
+				'Authorization': "Bearer " + gpt_api_key,
+				'Content-Type': 'application/json',
+			},
+			data: JSON.stringify(data),
+		}).then(function (response) {
+			$('#studentLoading').hide();
+			
+			var gptAnswer = response.choices[0].message.content;
+			var tempSubmitInfo = gptAnswer.split('---');
+			
+			thisSubmitInfo.studentCode = studentCode;
+			
+			document.getElementById('gptFeedback').value = tempSubmitInfo;
+			thisSubmitInfo.score = tempSubmitInfo[0];
+			thisSubmitInfo.feedback = tempSubmitInfo[1];
+			
+			fncInsertSubmitHistory();
+		});
+	}
  
- function fncSubmitProblemChatGPT() {
-     var problemCont = document.getElementById('problemCont').value;
-     var studentCode = document.getElementById('studentCode').value;
-     var testCase = thisProblemInfo.testCase;
-     var submitCont = '문제는 ' + problemCont + '이고, 학생이 입력한 코드는 ' + studentCode + '입니다.' + testCase + '위와 같이 테스트케이스는 각각 입력 => 출력의 형태로 담겨 있습니다. 학생이 입력한 코드를 실행하여 테스트케이스를 기반으로 점수와 피드백을 알려주세요.';
-     submitCont +='점수는 0에서 100 사이 정수로 말해주세요. 예를 들면 테스트케이스 10개 중 10개를 맞혔을 경우 100, 2개를 맞혔을 경우 20 입니다.';
-     submitCont +='피드백은 테스트케이스를 알려주거나, 올바른 코드를 알려주거나, 수정해줘서는 안됩니다. 학생의 코드의 문제점에 대한 힌트를 말해주면 됩니다.';
-     submitCont +='답변의 내용은 점수와 피드백 항목을 순서대로 ---을 구분값으로 하여 점수---피드백 형식을 지켜주세요.';
-     
-     $('#studentLoading').show();
-
-     var messages = [
-       { role: 'system', content: submitCont },
-       { role: 'user', content: ''},
-     ]
-
-     var data = {
-       model: 'gpt-3.5-turbo',
-       temperature: 0.5,
-       n: 1,
-       messages: messages,
-     }
-
-     $.ajax({
-       url: "https://api.openai.com/v1/chat/completions",
-       method: 'POST',
-       headers: {
-         Authorization: "Bearer " + gpt_api_key,
-         'Content-Type': 'application/json',
-       },
-       data: JSON.stringify(data),
-     }).then(function (response) {
-       $('#studentLoading').hide();
-       
-       var gptAnswer = response.choices[0].message.content;
-       var tempSubmitInfo = gptAnswer.split('---');
-       
-       thisSubmitInfo.studentCode = studentCode;
-       
-       document.getElementById('gptFeedback').value = tempSubmitInfo;
-       thisSubmitInfo.score = tempSubmitInfo[0];
-       thisSubmitInfo.feedback = tempSubmitInfo[1];
-       
-		fncInsertSubmitHistory();
-     });
-   }
- 
- function fncInsertSubmitHistory(){
+	function fncInsertSubmitHistory(){
 		$.ajax({
 			url : "${cpath}/insertSubmitHistory",
 			type : "post",
@@ -489,19 +495,62 @@
 				alert("fncInsertSubmitHistory error");
 			}
 		})
- }
+	}
  
+	function fncWebToReplit(){
+		$.ajax({
+			url: 'https://api.replit.com/v1/YOUR_ENDPOINT',
+			type: 'POST',
+			headers: {
+				'Authorization': 'Bearer YOUR_API_KEY',
+				'Content-Type': 'application/json'
+			},
+			data: JSON.stringify({ // 자바스크립트 값 replit에 보내기
+				message: 'Hello from JavaScript!',
+				value: 42
+			}),
+			success: function(response) {
+				console.log('fncWebToReplit successfully:', response); // 성공적으로 전송된 데이터 출력
+			},
+			error: function(xhr, status, error) {
+				console.error('Error sending data:', error);
+			}
+		});
+	
+	}
+	
+	function fncReplitToWeb(){
+		$.ajax({
+			url: 'https://api.replit.com/v1/YOUR_ENDPOINT',
+			type: 'POST',
+			headers: {
+				'Authorization': 'Bearer YOUR_API_KEY',
+				'Content-Type': 'application/json'
+			},
+			data: JSON.stringify({ // replit 코드 실행결과 가져오기
+				code: document.getElementById('studentCode').value,
+				language: 'c++'
+			}),
+			success: function(response) {
+				console.log('fncReplitToWeb successfully:', response); // 성공적으로 전송된 데이터 출력
+			},
+			error: function(xhr, status, error) {
+				console.error('Error sending data:', error);
+			}
+		});
+	
+	}
 </script>
 </head>
 <body>
 	<!-- 고정 헤더 -->
-    <header>
+	<header>
 		<h2>C++ 프로그래밍 학습</h2>
 		<div class="additional-info">
 			<span id="studentName"></span>
 			<span id="lastLoginTime"></span>
 		</div>
-    </header>
+	</header>
 
 
 	<!-- 메인페이지 -->
@@ -521,46 +570,46 @@
 		
 		<div class="main-container">
 		
-		    <!-- 교수 컨테이너 -->
-		    <div class="prof-container">
-		    	<div id="profProblemInfo"></div>
-		        <select name='setWeek' id='setWeek'>
-	        		<option value='1'>1</option>
-	        		<option value='2'>2</option>
-	        		<option value='3'>3</option>
-	        		<option value='4'>4</option>
-	        		<option value='5'>5</option>
-	        	</select>주차
-	        	<select name='setProblemType' id='setProblemType'>
-	        		<option value='1'>실습</option>
-	        		<option value='2'>과제</option>
-	        	</select>
-	        	<select name='setProblemLevel' id='setProblemLevel'>
-	        		<option value='하'>하</option>
-	        		<option value='중'>중</option>
-	        		<option value='상'>상</option>
-	        	</select>
-	        	<button type="button" onclick="fncMakeProblemChatGPT()">문제 생성</button>
-   				<div class="loading" id="profLoading">
-				  <img src="https://studentrights.sen.go.kr/images/common/loading.gif">
+			<!-- 교수 컨테이너 -->
+			<div class="prof-container">
+				<div id="profProblemInfo"></div>
+				<select name='setWeek' id='setWeek'>
+					<option value='1'>1</option>
+					<option value='2'>2</option>
+					<option value='3'>3</option>
+					<option value='4'>4</option>
+					<option value='5'>5</option>
+				</select>주차
+				<select name='setProblemType' id='setProblemType'>
+					<option value='1'>실습</option>
+					<option value='2'>과제</option>
+				</select>
+				<select name='setProblemLevel' id='setProblemLevel'>
+					<option value='하'>하</option>
+					<option value='중'>중</option>
+					<option value='상'>상</option>
+				</select>
+				<button type="button" onclick="fncMakeProblemChatGPT()">문제 생성</button>
+				<div class="loading" id="profLoading">
+					<img src="https://studentrights.sen.go.kr/images/common/loading.gif">
 				</div>
 	
-		    </div>
+			</div>
 			
-		    <!-- 학생 컨테이너 -->
-		    <div class="student-container">
-		        <div id="problemType"></div>
-		        <div id="problemList"></div>
-		        <div id="problemInfo">
-					<div><textarea id="problemCont" name="problemCont" cols="50" rows="3"></textarea></div>	        
+			<!-- 학생 컨테이너 -->
+			<div class="student-container">
+				<div id="problemType"></div>
+				<div id="problemList"></div>
+				<div id="problemInfo">
+					<div><textarea id="problemCont" name="problemCont" cols="50" rows="3"></textarea></div>
 					<div><textarea id="studentCode" name="studentCode" cols="50" rows="30"></textarea></div>
 					<button type="button" onclick="fncSubmitProblemChatGPT()">제출</button>
 					<div class="loading" id="studentLoading">
 					  <img src="https://studentrights.sen.go.kr/images/common/loading.gif">
 					</div>
-					<div><textarea id="gptFeedback" name="gptFeedback" cols="50" rows="3"></textarea></div>    
-		        </div>
-	    	</div>
+					<div><textarea id="gptFeedback" name="gptFeedback" cols="50" rows="3"></textarea></div>
+				</div>
+			</div>
 	
 		    
 		</div>

@@ -3,9 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="CPLearning.Mapper.CPLearningMapper">
-	<select id="getApiKey" resultType="String">
-		SELECT APIKEY FROM APIKEY
-		WHERE APINAME = 'chatGPT'
+	<select id="getApiKey" resultType="CPLearning.Entity.ApiKeyInfo">
+		SELECT * FROM APIKEY
 	</select>
 
 	<select id="studentLogin" resultType="CPLearning.Entity.StudentInfo">

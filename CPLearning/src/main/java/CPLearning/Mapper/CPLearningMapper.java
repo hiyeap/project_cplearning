@@ -1,7 +1,9 @@
 package CPLearning.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
+import CPLearning.Entity.ApiKeyInfo;
 import CPLearning.Entity.ProblemInfo;
 import CPLearning.Entity.StudentInfo;
 import CPLearning.Entity.SubmitHistory;
@@ -30,6 +32,6 @@ public interface CPLearningMapper {
 	
 	public int getSubmitCount(SubmitHistory submitHistory);
 
-	public String getApiKey();
+	public List<ApiKeyInfo> getApiKey();
 
 }
