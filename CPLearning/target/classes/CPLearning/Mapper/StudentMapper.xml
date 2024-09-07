@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CPLearning.Mapper.StudentMapper">
+	<select id="getProblemType" resultType="CPLearning.Entity.ProblemInfo">
+		SELECT WEEK, PROBLEMTYPE FROM PROBLEMINFO
+		WHERE USEYN = 'Y'
+		GROUP BY WEEK, PROBLEMTYPE
+		ORDER BY WEEK, PROBLEMTYPE
+	</select>
+	
+	<select id="getProblemList" resultType="CPLearning.Entity.ProblemInfo">
+		SELECT * FROM PROBLEMINFO
+		WHERE USEYN = 'Y'
+		AND WEEK = #{week}
+		AND PROBLEMTYPE = #{problemType}
+		ORDER BY PROBLEMNO
+	</select>
+	
+	<select id="getProblemInfo" resultType="CPLearning.Entity.ProblemInfo">
+		SELECT * FROM PROBLEMINFO
+		WHERE PROBLEMNO = #{problemNo}
+	</select>
+	
+	<insert id="insertSubmitHistory" parameterType="CPLearning.Entity.SubmitHistory">
+		INSERT INTO SUBMITHISTORY (
+			STUDENTNO, PROBLEMTYPE, PROBLEMNO, SUBMITTIME, SUBMITCOUNT,
+			SUBMITCONT, SCORE, FEEDBACK
+		) VALUES (
+			#{studentNo}, #{problemType}, #{problemNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'), #{submitCount},
+		 	#{submitCont}, #{score}, #{feedback}
+		)
+	</insert>
+	
+	<select id="getSubmitCount" parameterType="CPLearning.Entity.SubmitHistory" resultType="int">
+		SELECT COUNT(*) FROM SUBMITHISTORY
+		WHERE 1 = 1
+		<if test="studentNo != null and studentNo != '' ">
+		AND STUDENTNO = #{studentNo}
+		</if>
+		<if test="problemNo != null and problemNo != '' ">
+		AND PROBLEMNO = #{problemNo}
+		</if>
+	</select>
+</mapper>

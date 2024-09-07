@@ -16,8 +16,10 @@ public class ProblemInfo {
 	private String problemCode;
 	private String answerCode;
 	private String testCase;
-	private String useYn;
 	private String hint;
 	private String dueDate;
+	private String feedbackYn;
+	private String feedbackDate;
+	private String useYn;
 
 }

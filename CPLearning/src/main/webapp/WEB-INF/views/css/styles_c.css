@@ -1,96 +1,103 @@
-.prof-container {
-	display : none;
-}
-
-.student-container {
+.main-container {
 	display : none;
 }
 
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding-top: 60px; /* 헤더 공간을 확보하기 위해 패딩 추가 */
-    background-color: #f0f2f5;
+    padding: 0;
 }
-
-/* 고정 헤더 스타일 */
-header {
+.header-container {
     position: fixed;
-    display: flex;
-    align-items: center; /* 세로 정렬 */
+    width: 100%;
     top: 0;
-    left: 0;
-    width: 100%;
-    height : 15%;
-    background-color: #333;
-    color: #ffffff;
+    z-index: 1000; /* Ensures it stays above other content */
+    display: flex;
+    flex-direction: column;
+}
+header {
+    background-color: #000; /* Black color for the header */
+    color: white;
+    padding: 20px;
     text-align: center;
-    padding: 5px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    border-bottom: 1px solid #333;
+    height:70px;
 }
-
-.additional-info {
-    margin-left: 20px; /* 텍스트와 추가 정보 간의 간격 */
+.top-bar {
+    display: none;
+    background-color: #222; /* Dark gray for top-bar */
+    color: white;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    height: 60px; /* Adjust height as needed */
 }
-
-/* 로그인 폼 컨테이너 */
-.login-container {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-    margin: 100px auto; /* 상단 마진을 주어 헤더와의 간격 확보 */
+.login-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
-
-/* 폼 타이틀 */
-.login-container h2 {
-    margin-bottom: 20px;
-    color: #333333;
-    text-align: center;
+.login-info span {
+    margin-left: 10px;
 }
-
-/* 인풋 필드 스타일 */
-.login-container input[type="text"],
-.login-container input[type="password"] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 16px;
+nav {
+    background-color: #333; /* Dark gray for nav */
+    color: white;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #444;
 }
-
-/* 로그인 버튼 스타일 */
-.login-container button {
-    width: 100%;
-    background-color: #4CAF50;
+nav a {
     color: white;
     padding: 14px 20px;
-    margin: 8px 0;
+    text-decoration: none;
+    text-align: center;
+}
+nav a:hover {
+    background-color: #555; /* Slightly lighter gray on hover */
+}
+.login-container {
+	margin: 120px auto;
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.login-container h2 {
+    margin-top: 0;
+}
+.login-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
+    background-color: #000; /* Black color for button */
+    color: white;
     font-size: 16px;
+    cursor: pointer;
 }
-
 .login-container button:hover {
-    background-color: #45a049;
+    background-color: #333; /* Slightly lighter black on hover */
 }
-
+        
 /* 메인 컨테이너 스타일 */
 .main-container {
     padding: 20px;
     background-color: #ffffff;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 200px auto;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    margin: 100px auto; /* 상단 마진을 주어 헤더와의 간격 확보 */
 }
 
 /* page-loading */

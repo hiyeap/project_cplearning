@@ -7,13 +7,7 @@ import CPLearning.Entity.ProblemInfo;
 import CPLearning.Entity.StudentInfo;
 import CPLearning.Entity.SubmitHistory;
 
-public interface CPLearningMapper {
-
-	public StudentInfo studentLogin(StudentInfo studentInfo);
-
-	public List<StudentInfo> selectLoginHistory(StudentInfo studentInfo);
-	
-	public void insertLoginHistory(StudentInfo studentInfo);
+public interface StudentMapper {
 
 	public List<ProblemInfo> getProblemType();
 
@@ -21,16 +15,8 @@ public interface CPLearningMapper {
 
 	public ProblemInfo getProblemInfo(ProblemInfo problemInfo);
 	
-	public int insertProblemInfo(ProblemInfo problemInfo);
-
-	public List<ProblemInfo> getProfProblemInfo(ProblemInfo problemInfo);
-
 	public int insertSubmitHistory(SubmitHistory submitHistory);
 	
-	public List<SubmitHistory> getSubmitHistory(SubmitHistory submitHistory);
-	
 	public int getSubmitCount(SubmitHistory submitHistory);
-
-	public List<ApiKeyInfo> getApiKey();
 
 }
