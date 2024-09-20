@@ -18,8 +18,6 @@ window.addEventListener('load', function() {
 				for(var i = 0; i < res.length; i++){
 					if(res[i].apiName == 'chatGPT'){
 						gpt_api_key = res[i].apiKey;
-					} else if(res[i].apiName == 'replit'){
-						replit_api_key = res[i].apiKey;
 					}
 				}
 			}
@@ -58,9 +56,11 @@ function fncLogin() {
 				
 				if(studentNo == '1111'){
 					$(".prof-container").css("display", "block");
+					$("#student-nav").css("display", "none");
 					$(".student-container").css("display", "none");
 				} else {
 					$(".student-container").css("display", "block");
+					$("#prof-nav").css("display", "none");
 					$(".prof-container").css("display", "none");
 					fncGetProblemType();
 				}

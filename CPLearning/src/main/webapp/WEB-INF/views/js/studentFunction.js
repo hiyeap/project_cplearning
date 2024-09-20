@@ -173,4 +173,24 @@ function fncInsertSubmitHistory(){
 		}
 	})
 }
-	
+
+function test(){
+	$.ajax({
+		url : cpath + "/test",
+		type : "post",
+		data : {
+			
+		},
+		success : function(res) {
+			if (res) {
+				console.log("## test ##");
+				console.log(res);
+			}
+			
+		
+		},
+		error : function() {
+			alert("test");
+		}
+	})
+}

@@ -1,5 +1,9 @@
 package CPLearning.Controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,5 +57,48 @@ public class StudentController {
 		
 		return cnt;
 	}
+	
+	@PostMapping("/test")
+	public String test() {
+		String result = "";
+		try {
+			// CMake 프로젝트 디렉토리
+			File projectDir = new File("C:/Users/user/source/repos/CMakeProject1");
+		
+			// 빌드 디렉토리 생성
+			File buildDir = new File(projectDir, "build/Debug");
+			if (!buildDir.exists()) {
+				buildDir.mkdir();
+			}
+			
+			// CMake를 호출하여 프로젝트 빌드
+			ProcessBuilder cmakeBuilder = new ProcessBuilder("cmake", "..");
+			cmakeBuilder.directory(buildDir);
+			Process cmakeProcess = cmakeBuilder.start();
+			cmakeProcess.waitFor(); // 빌드가 완료될 때까지 대기
+			
+			// 빌드 후 실행 파일 호출
+			ProcessBuilder processBuilder = new ProcessBuilder("C:/Users/user/source/repos/CMakeProject1/build/Debug/CMakeProject1.exe");
+			processBuilder.directory(buildDir); // 작업 디렉토리 설정
+			
+			Process process = processBuilder.start();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			StringBuilder output = new StringBuilder();
+			String line;
+			
+			while ((line = reader.readLine()) != null) {
+				output.append(line).append("\n");
+			}
+			
+			reader.close();
+			
+			// 실행 결과를 웹 응답으로 사용
+			result = output.toString();
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	
 }

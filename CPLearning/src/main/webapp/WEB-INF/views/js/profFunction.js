@@ -108,6 +108,7 @@ var problemObject = {
 /* -------------------- 교수자 기능 -------------------- */
 function fncGetStudentInfo(){
 	$("#studentInfo").css("display", "block");
+	$("#setProgress").css("display", "none");
 	$("#profProblemInfo").css("display", "none");
 	$("#insertProblemForm").css("display", "none");
 	
@@ -148,8 +149,20 @@ function fncGetStudentInfo(){
 	})
 }
 
+function fncSetProgress(){
+	$("#studentInfo").css("display", "none");
+	$("#setProgress").css("display", "block");
+	$("#profProblemInfo").css("display", "none");
+	$("#insertProblemForm").css("display", "none");
+	
+	// 1주차~10주차 진도 설정
+	console.log("fncSetProgress");
+	
+}
+
 function fncGetProfProblemInfo(){
 	$("#studentInfo").css("display", "none");
+	$("#setProgress").css("display", "none");
 	$("#profProblemInfo").css("display", "block");
 	$("#insertProblemForm").css("display", "none");
 	
@@ -208,7 +221,7 @@ function fncGetProfProblemInfo(){
 		
 		},
 		error : function() {
-			alert("fncInsertProblem error");
+			alert("fncGetProfProblemInfo error");
 		}
 	})
 }
@@ -222,7 +235,7 @@ function fncGetSubmitHistory(problemNo){
 		},
 		success : function(res) {
 			if (res) {
-				var problemSubmitHistory = "<table>";
+				var problemSubmitHistory = "<table border='1'>";
 				
 				problemSubmitHistory+="<tr>";
 				problemSubmitHistory+="<th>학번</th>";
@@ -242,7 +255,8 @@ function fncGetSubmitHistory(problemNo){
 					problemSubmitHistory+="<td>" + res[i].submitDate + "</td>";
 					problemSubmitHistory+="<td>" + res[i].submitCont + "</td>";
 					problemSubmitHistory+="<td>" + res[i].score + "</td>";
-					problemSubmitHistory+="<td>" + res[i].feedback + "</td>";
+					problemSubmitHistory+="<td><input type='text' name='feedback' value='" + res[i].feedback + "'></td>";
+					
 					problemSubmitHistory+="</tr>";
 				}
 		

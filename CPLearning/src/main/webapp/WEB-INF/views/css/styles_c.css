@@ -128,3 +128,16 @@ nav a:hover {
   left: 43%;
   z-index: 101;
 }
+
+#problemSubmitHistory {
+	width: 60%;
+	height: 70%;
+	position: absolute;
+	top: 20%;
+	left: 30%;
+	bottom: 49%;
+	right: 50%;
+	z-index: 2;
+	border-radius: 10px;
+	text-align: center;
+}

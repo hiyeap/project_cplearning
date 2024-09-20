@@ -37,17 +37,21 @@
 				<span id="studentName"></span>
 				<span id="lastLoginTime"></span>
 			</div>
-			<nav>
+			<nav id="prof-nav">
 				<a href="javascript:fncGetStudentInfo()">학생 정보</a>
 				<a href="javascript:fncSetProgress()">진도 설정</a>
-				<a href="javascript:fncGetProfProblemInfo()"">문제 목록</a>
+				<a href="javascript:fncGetProfProblemInfo()">문제 목록</a>
 				<a href="javascript:fncInsertProblemForm()">문제 생성</a>
+			</nav>
+			<nav id="student-nav">
+				<a href="javascript:fncGetProblemType1()">실습</a>
+				<a href="javascript:fncGetProblemType2()">과제</a>
 			</nav>
 		</div>
 	</div>
 	
 	<!-- 메인페이지 -->
-
+	
 	<!-- 로그인 -->
 	<div class="login-container">
 		<div>
@@ -63,7 +67,9 @@
 		<!-- 교수 컨테이너 -->
 		<div class="prof-container">
 			<div id="studentInfo"></div>
+			<div id="setProgress"></div>
 			<div id="profProblemInfo"></div>
+			<div id="problemSubmitHistory"></div>
 			<div id="insertProblemForm">
 				<select name='setWeek' id='setWeek'>
 					<option value='1'>1</option>
@@ -117,10 +123,9 @@
 				</div>
 			</div>
 		</div>
-
-
+		
 	</div>
-
+	<button type="button" onclick="test()">테스트버튼</button>
 
 </body>
 </html>
