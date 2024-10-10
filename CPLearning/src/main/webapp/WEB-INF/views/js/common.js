@@ -58,8 +58,9 @@ function fncLogin() {
 					$(".prof-container").css("display", "block");
 					$("#student-nav").css("display", "none");
 					$(".student-container").css("display", "none");
+					fncInsertProblemForm();
 				} else {
-					$(".student-container").css("display", "block");
+					$(".student-container").css("display", "flex");
 					$("#prof-nav").css("display", "none");
 					$(".prof-container").css("display", "none");
 					fncGetProblemType();

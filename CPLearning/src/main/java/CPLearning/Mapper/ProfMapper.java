@@ -6,6 +6,7 @@ import CPLearning.Entity.ApiKeyInfo;
 import CPLearning.Entity.ProblemInfo;
 import CPLearning.Entity.StudentInfo;
 import CPLearning.Entity.SubmitHistory;
+import CPLearning.Entity.WeekInfo;
 
 public interface ProfMapper {
 
@@ -17,5 +18,6 @@ public interface ProfMapper {
 
 	public List<SubmitHistory> getSubmitHistory(SubmitHistory submitHistory);
 	
+	public List<WeekInfo> getWeekInfo(WeekInfo weekInfo);
 
 }

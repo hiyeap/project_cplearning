@@ -19,4 +19,5 @@ public interface StudentMapper {
 	
 	public int getSubmitCount(SubmitHistory submitHistory);
 
+	public List<SubmitHistory> getMySubmitHistory(SubmitHistory submitHistory);
 }

@@ -31,14 +31,18 @@
 	</select>
 	
 	<select id="getSubmitHistory" resultType="CPLearning.Entity.SubmitHistory">
-		SELECT * FROM SUBMITHISTORY
-		WHERE 1 = 1
-		<if test="studentNo != null and studentNo != '' ">
-		AND STUDENTNO = #{studentNo}
-		</if>
+		SELECT A.*, B.NAME
+		FROM SUBMITHISTORY A,
+			 STUDENTINFO B
+		WHERE A.STUDENTNO = B.STUDENTNO
 		<if test="problemNo != null and problemNo != '' ">
-		AND PROBLEMNO = #{problemNo}
+		AND A.PROBLEMNO = #{problemNo}
 		</if>
-		ORDER BY SUBMITTIME DESC
+		ORDER BY A.SUBMITTIME DESC
+	</select>
+	
+	<select id="getWeekInfo" resultType="CPLearning.Entity.WeekInfo">
+		SELECT *
+		FROM WEEKINFO
 	</select>
 </mapper>

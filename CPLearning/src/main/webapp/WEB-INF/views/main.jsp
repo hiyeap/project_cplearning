@@ -32,6 +32,7 @@
 		<header>
 			<h1>C++ 프로그래밍 학습</h1>
 		</header>
+		
 		<div class="top-bar">
 			<div class="login-info">
 				<span id="studentName"></span>
@@ -44,13 +45,15 @@
 				<a href="javascript:fncInsertProblemForm()">문제 생성</a>
 			</nav>
 			<nav id="student-nav">
-				<a href="javascript:fncGetProblemType1()">실습</a>
-				<a href="javascript:fncGetProblemType2()">과제</a>
+				<a href="javascript:fncGetProblemType()">메인</a>
+				<a href="javascript:fncGetAllProblem()">전체문제</a>
+				<a href="javascript:fncGetMySubmitHistory()">제출이력</a>
 			</nav>
 		</div>
 	</div>
 	
 	<!-- 메인페이지 -->
+	<div id="problemSubmitHistory" style="display : none;"></div>
 	
 	<!-- 로그인 -->
 	<div class="login-container">
@@ -61,7 +64,7 @@
 			<button type="button" onclick="fncLogin()">로그인</button>
 		</div>
 	</div>
-
+	
 	<div class="main-container">
 
 		<!-- 교수 컨테이너 -->
@@ -69,10 +72,9 @@
 			<div id="studentInfo"></div>
 			<div id="setProgress"></div>
 			<div id="profProblemInfo"></div>
-			<div id="problemSubmitHistory"></div>
 			<div id="insertProblemForm">
 				<select name='setWeek' id='setWeek'>
-					<option value='1'>1</option>
+					<option value='1' selected>1</option>
 					<option value='2'>2</option>
 					<option value='3'>3</option>
 					<option value='4'>4</option>
@@ -104,28 +106,32 @@
 
 		<!-- 학생 컨테이너 -->
 		<div class="student-container">
-			<div id="problemType"></div>
-			<div id="problemList"></div>
-			<div id="problemInfo">
-				<div>
-					<textarea id="problemCont" name="problemCont" cols="50" rows="3"></textarea>
-				</div>
-				<div>
-					<textarea id="studentCode" name="studentCode" cols="50" rows="30"></textarea>
-				</div>
-				<button type="button" onclick="fncSubmitProblemChatGPT()">제출</button>
-				<div class="loading" id="studentLoading">
-					<img
-						src="https://studentrights.sen.go.kr/images/common/loading.gif">
-				</div>
-				<div>
-					<textarea id="gptFeedback" name="gptFeedback" cols="50" rows="3"></textarea>
+			<div class="left">
+				<div id="problemType"></div>
+				<div id="problemList"></div>
+			</div>
+			<div class="right">
+				<div id="problemInfo">
+					<div>
+						<textarea id="problemCont" name="problemCont" rows="5" style="width:100%" readonly></textarea>
+					</div>
+					<div>
+						<textarea id="studentCode" name="studentCode" rows="30" style="width:100%"></textarea>
+					</div>
+					<button type="button" onclick="fncSubmitProblemChatGPT()">제출</button>
+					<div class="loading" id="studentLoading">
+						<img
+							src="https://studentrights.sen.go.kr/images/common/loading.gif">
+					</div>
+					<div>
+						<textarea id="gptFeedback" name="gptFeedback" rows="3" style="width:100%" readonly></textarea>
+					</div>
 				</div>
 			</div>
 		</div>
 		
 	</div>
-	<button type="button" onclick="test()">테스트버튼</button>
+	<!-- <button type="button" onclick="test()">테스트버튼</button> -->
 
 </body>
 </html>

@@ -5,14 +5,21 @@ var thisProblemInfo = {}; // 현재 선택한 문제 정보를 저장
 var thisSubmitInfo = {}; // 현재 제출 정보를 저장
 
 /* -------------------- 학생 기능 -------------------- */
+function fncStdOtherMenu(){
+	$("#problemList").css("display", "none");
+	$("#problemInfo").css("display", "none");
+	$("#problemSubmitHistory").css("display", "none");
+}
+
 function fncGetProblemType(){
-	// 1. 현재 공개되어 있는 유형(실습/과제)를 가져온다
+	fncStdOtherMenu();
+	$("#problemType").css("display", "block");
 	
 	$.ajax({
 		url : cpath + "/getProblemType",
 		type : "post",
 		data : {
-			// 보내줄 데이터 없음 (임시)
+			
 		},
 		success : function(res) {
 			if (res) {
@@ -40,10 +47,7 @@ function fncGetProblemType(){
 }
 
 function fncGetProblemList(week, type) {
-	// 1. 하위 객체 안보이게
-	$("#problemInfo").css("display", "none");
-	
-	// 2. n 주차 실습, 과제를 선택했을 때 문제를 가져온다
+	fncStdOtherMenu();
 	
 	$.ajax({
 		url : cpath + "/getProblemList",
@@ -59,7 +63,7 @@ function fncGetProblemList(week, type) {
 				var problemList = "<ul>";
 				
 				for(var i = 0; i < res.length; i++){
-					problemList += "<li><a href='javascript:fncGetProblemInfo(" + res[i].problemNo + ")'>" + (i + 1) + "번째 문제</a></li>";
+					problemList += "<li><a href='javascript:fncGetProblemInfo(" + res[i].problemNo + ")'>" + res[i].problemNo + "번 문제</a></li>";
 				}
 				
 				problemList += "</ul>";
@@ -91,8 +95,7 @@ function fncGetProblemInfo(problemNo) {
 				$("#problemInfo").css("display", "block");
 				document.getElementById("problemCont").value = res.problemCont;
 				document.getElementById("studentCode").value = res.problemCode;
-				
-				
+				document.getElementById("gptFeedback").value = '코드를 제출하면 이 부분에 피드백이 제공됩니다.';
 			}
 			
 		
@@ -103,14 +106,23 @@ function fncGetProblemInfo(problemNo) {
 	})
 }
 
+function fncGetAllProblem(){
+	$("#problemType").css("display", "none");
+	fncGetProblemList();
+}
+
 function fncSubmitProblemChatGPT() {
 	var problemCont = document.getElementById('problemCont').value;
 	var studentCode = document.getElementById('studentCode').value;
-	var testCase = thisProblemInfo.testCase;
+/*	var testCase = thisProblemInfo.testCase;
 	var submitCont = '문제는 ' + problemCont + '이고, 학생이 입력한 코드는 ' + studentCode + '입니다.' + testCase + '위와 같이 테스트케이스는 각각 입력 => 출력의 형태로 담겨 있습니다. 학생이 입력한 코드를 실행하여 테스트케이스를 기반으로 점수와 피드백을 알려주세요.';
 	submitCont +='점수는 0에서 100 사이 정수로 말해주세요. 예를 들면 테스트케이스 10개 중 10개를 맞혔을 경우 100, 2개를 맞혔을 경우 20 입니다.';
 	submitCont +='피드백은 테스트케이스를 알려주거나, 올바른 코드를 알려주거나, 수정해줘서는 안됩니다. 학생의 코드의 문제점에 대한 힌트를 말해주면 됩니다.';
 	submitCont +='답변의 내용은 점수와 피드백 항목을 순서대로 ---을 구분값으로 하여 점수---피드백 형식을 지켜주세요.';
+*/
+
+	var submitCont = '문제는 ' + problemCont + '이고, 학생이 입력한 코드는 ' + studentCode + '입니다.';
+	submitCont +='학생의 코드에 대한 피드백을 100글자 이내로 해주세요.';
 
 	$('#studentLoading').show();
 
@@ -120,7 +132,7 @@ function fncSubmitProblemChatGPT() {
 	]
 
 	var data = {
-		model: 'gpt-3.5-turbo',
+		model: 'gpt-4o-mini',
 		temperature: 0.5,
 		n: 1,
 		messages: messages,
@@ -137,13 +149,10 @@ function fncSubmitProblemChatGPT() {
 	}).then(function (response) {
 		$('#studentLoading').hide();
 		
-		var tempSubmitInfo = gptAnswer.split('---');
-		
-		thisSubmitInfo.studentCode = studentCode;
-		
-		document.getElementById('gptFeedback').value = tempSubmitInfo;
-		thisSubmitInfo.score = tempSubmitInfo[0];
-		thisSubmitInfo.feedback = tempSubmitInfo[1];
+		document.getElementById('gptFeedback').value = response.choices[0].message.content;
+		//thisSubmitInfo.studentCode = studentCode;
+		//thisSubmitInfo.score = tempSubmitInfo[0];
+		//thisSubmitInfo.feedback = tempSubmitInfo[1];
 		
 		fncInsertSubmitHistory();
 	});
@@ -157,9 +166,9 @@ function fncInsertSubmitHistory(){
 			"studentNo" : thisStudentInfo.studentNo,
 			"problemNo" :  thisProblemInfo.problemNo,
 			"problemType" : thisProblemInfo.problemType,
-			"submitCont" : thisSubmitInfo.studentCode,
-			"score" : thisSubmitInfo.score,
-			"feedback" : thisSubmitInfo.feedback,
+			"submitCont" : $("#studentCode").val(),
+			"score" : thisSubmitInfo.score || 0,
+			"feedback" : $('#gptFeedback').val(),
 		},
 		success : function(res) {
 			if (res) {
@@ -170,6 +179,56 @@ function fncInsertSubmitHistory(){
 		},
 		error : function() {
 			alert("fncInsertSubmitHistory error");
+		}
+	})
+}
+
+function fncGetMySubmitHistory(){
+	$("#problemSubmitHistory").css("display", "block");
+	
+	$.ajax({
+		url : cpath + "/getMySubmitHistory",
+		type : "post",
+		data : {
+			"studentNo" :  thisStudentInfo.studentNo
+		},
+		success : function(res) {
+			if (res) {
+				var problemSubmitHistory ="<button onclick='fncCloseSubmitHistory()' id='closeBtn'>X</button>"
+				problemSubmitHistory+="<table>";
+				problemSubmitHistory+="<tr>";
+				problemSubmitHistory+="<th>문제타입</th>";
+				problemSubmitHistory+="<th>문제번호</th>";
+				problemSubmitHistory+="<th>제출횟수</th>";
+				problemSubmitHistory+="<th>제출일시</th>";
+				problemSubmitHistory+="<th style='max-width: 150px;'>제출내용</th>";
+				problemSubmitHistory+="<th>점수</th>";
+				problemSubmitHistory+="<th>피드백</th>";
+				problemSubmitHistory+="</tr>";
+				
+				for(var i = 0; i < res.length; i++){
+					var problemTypeCont = res[i].problemType == 1 ? "실습" : "과제";
+					
+					problemSubmitHistory+="<tr>";
+					problemSubmitHistory+="<td>" + problemTypeCont + "</td>";
+					problemSubmitHistory+="<td>" + res[i].problemNo + "</td>";
+					problemSubmitHistory+="<td>" + res[i].submitCount + "</td>";
+					problemSubmitHistory+="<td>" + res[i].submitTime + "</td>";
+					problemSubmitHistory+="<td>" + res[i].submitCont + "</td>";
+					problemSubmitHistory+="<td>" + res[i].score + "</td>";
+					problemSubmitHistory+="<td><textarea name='feedback' cols='50' rows='3'>" + res[i].feedback + "</textarea></td>";
+					
+					problemSubmitHistory+="</tr>";
+				}
+		
+				problemSubmitHistory += "</table>";
+				$("#problemSubmitHistory").html(problemSubmitHistory).css("display", "block");
+			}
+			
+		
+		},
+		error : function() {
+			alert("fncGetMySubmitHistory error");
 		}
 	})
 }

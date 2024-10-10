@@ -13,8 +13,12 @@
 	<select id="getProblemList" resultType="CPLearning.Entity.ProblemInfo">
 		SELECT * FROM PROBLEMINFO
 		WHERE USEYN = 'Y'
+		<if test="week != null and week != '' ">
 		AND WEEK = #{week}
+		</if>
+		<if test="problemType != null and problemType != '' ">
 		AND PROBLEMTYPE = #{problemType}
+		</if>
 		ORDER BY PROBLEMNO
 	</select>
 	
@@ -42,5 +46,15 @@
 		<if test="problemNo != null and problemNo != '' ">
 		AND PROBLEMNO = #{problemNo}
 		</if>
+	</select>
+	
+	<select id="getMySubmitHistory" resultType="CPLearning.Entity.SubmitHistory">
+		SELECT *
+		FROM SUBMITHISTORY
+		WHERE 1 = 1
+		<if test="studentNo != null and studentNo != '' ">
+		AND STUDENTNO = #{studentNo}
+		</if>
+		ORDER BY SUBMITTIME DESC
 	</select>
 </mapper>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import CPLearning.Entity.ProblemInfo;
 import CPLearning.Entity.StudentInfo;	
 import CPLearning.Entity.SubmitHistory;
+import CPLearning.Entity.WeekInfo;
 import CPLearning.Mapper.ProfMapper;
 
 @RestController
@@ -49,6 +50,15 @@ public class ProfController {
 		System.out.println("##### getSubmitHistory END ##### " + submitHistory);
 
 		return submitHistory;
+	}
+	
+	@PostMapping("/getWeekInfo")
+	public List<WeekInfo> getWeekInfo(WeekInfo WeekInfo, HttpServletRequest request) {
+		System.out.println("##### getWeekInfo START ##### ");
+		List<WeekInfo> weekInfo = profMapper.getWeekInfo(WeekInfo); // 학번에 따른 or 문제에 따른 제출정보 불러오기
+		System.out.println("##### getWeekInfo END ##### " + weekInfo);
+
+		return weekInfo;
 	}
 	
 

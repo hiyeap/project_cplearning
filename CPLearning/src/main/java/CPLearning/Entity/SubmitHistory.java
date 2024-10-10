@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SubmitHistory {
 	private String studentNo;
+	private String name;
 	private String problemType;
 	private String problemNo;
 	private String submitTime;

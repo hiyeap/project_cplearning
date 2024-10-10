@@ -48,14 +48,18 @@ public class StudentController {
 	@PostMapping("/insertSubmitHistory")
 	public int insertSubmitHistory(SubmitHistory SubmitHistory, HttpServletRequest request) {
 		
-		System.out.println("##### insertSubmitHistory ##### " + SubmitHistory);
-		
 		String submitCount = String.valueOf(studentMapper.getSubmitCount(SubmitHistory)+1);
 		SubmitHistory.setSubmitCount(submitCount);
-		
+		System.out.println("##### insertSubmitHistory ##### " + SubmitHistory);
 		int cnt = studentMapper.insertSubmitHistory(SubmitHistory);
 		
 		return cnt;
+	}
+	
+	@PostMapping("/getMySubmitHistory")
+	public List<SubmitHistory> getMySubmitHistory(SubmitHistory SubmitHistory, HttpServletRequest request) {
+		List<SubmitHistory> submitHistory = studentMapper.getMySubmitHistory(SubmitHistory); // studentNo = '' 
+		return submitHistory;
 	}
 	
 	@PostMapping("/test")
