@@ -188,6 +188,7 @@ function fncSetProgress(){
 		setProgress+="<tr>";
 		setProgress+="<td>" + weekInfo[i].week + "</td>";
 		setProgress+="<td><input type='text' value='" + weekInfo[i].weekCont + "'></td>";
+		setProgress+="<td><button onclick=''>확인" + "</button></td>";
 		setProgress+="</tr>";
 	}
 
@@ -241,8 +242,8 @@ function fncGetProfProblemInfo(){
 					profProblemInfo+="<td>" + res[i].hint + "</td>"; */
 					profProblemInfo+="<td><input type='text' name='feedbackDate' value='" + res[i].feedbackDate + "'></td>";
 					profProblemInfo+="<td><input type='text' name='dueDate' value='" + res[i].dueDate + "'></td>";
-					profProblemInfo+="<td><button>수정" + "</button></td>";
-					profProblemInfo+="<td><button>삭제" + "</button></td>";
+					profProblemInfo+="<td><button onclick=''>수정" + "</button></td>";
+					profProblemInfo+="<td><button onclick=''>삭제" + "</button></td>";
 					profProblemInfo+="</tr>";
 				}
 		
