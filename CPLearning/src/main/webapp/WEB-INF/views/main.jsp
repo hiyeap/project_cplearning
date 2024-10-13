@@ -53,7 +53,7 @@
 	</div>
 	
 	<!-- 메인페이지 -->
-	<div id="problemSubmitHistory" style="display : none;"></div>
+	<div id="problemSubmitHistory" style="display : none; position : fixed;"></div>
 	
 	<!-- 로그인 -->
 	<div class="login-container">

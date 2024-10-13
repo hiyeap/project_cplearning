@@ -102,7 +102,9 @@ var problemObject = {
 	testCase : testCaseEx,
 	hint : hintEx
 }
-	
+
+var weekInfo = []; // 주차별 진도를 저장
+
 function fncProfHideOtherMenu(){
 	$("#studentInfo").css("display", "none");
 	$("#setProgress").css("display", "none");
@@ -112,6 +114,24 @@ function fncProfHideOtherMenu(){
 }
 
 /* -------------------- 교수자 기능 -------------------- */
+function fncGetWeekInfo(){
+	$.ajax({
+		url : cpath + "/getWeekInfo",
+		type : "post",
+		data : {
+			// 추후 난이도별, 주차별 조회 등 추가 필요
+		},
+		success : function(res) {
+			
+			weekInfo = res;
+			fncInsertProblemForm();
+		},
+		error : function() {
+			alert("fncSetProgress error");
+		}
+	})
+}
+
 function fncGetStudentInfo(){
 	fncProfHideOtherMenu();
 	$("#studentInfo").css("display", "block");
@@ -157,36 +177,23 @@ function fncSetProgress(){
 	fncProfHideOtherMenu();
 	$("#setProgress").css("display", "block");
 	
-	$.ajax({
-		url : cpath + "/getWeekInfo",
-		type : "post",
-		data : {
-			// 추후 난이도별, 주차별 조회 등 추가 필요
-		},
-		success : function(res) {
-			var setProgress = "<table>";
-		
-			setProgress+="<tr>";
-			setProgress+="<th>주차</th>";
-			setProgress+="<th>학습내용</th>";
-			setProgress+="</tr>";
-			
-			for(var i = 0; i < res.length; i++){
-				setProgress+="<tr>";
-				setProgress+="<td>" + res[i].week + "</td>";
-				setProgress+="<td><input type='text' value='" + res[i].weekCont + "'></td>";
-				setProgress+="</tr>";
-			}
+	var setProgress = "<table>";
+
+	setProgress+="<tr>";
+	setProgress+="<th>주차</th>";
+	setProgress+="<th>학습내용</th>";
+	setProgress+="</tr>";
 	
-			setProgress += "<//table>";
-			
-			$("#setProgress").html(setProgress);
-		},
-		error : function() {
-			alert("fncSetProgress error");
-		}
-	})
+	for(var i = 0; i < weekInfo.length; i++){
+		setProgress+="<tr>";
+		setProgress+="<td>" + weekInfo[i].week + "</td>";
+		setProgress+="<td><input type='text' value='" + weekInfo[i].weekCont + "'></td>";
+		setProgress+="</tr>";
+	}
+
+	setProgress += "<//table>";
 	
+	$("#setProgress").html(setProgress);
 }
 
 function fncGetProfProblemInfo(){
@@ -269,14 +276,14 @@ function fncGetSubmitHistory(problemNo){
 		},
 		success : function(res) {
 			if (res) {
-				var problemSubmitHistory ="<button onclick='fncCloseSubmitHistory()' id='closeBtn'>X</button>"
+				var problemSubmitHistory ="<button onclick='fncCloseSubmitHistory()' id='closeBtn'>X</button>";
 				problemSubmitHistory+="<table>";
 				problemSubmitHistory+="<tr>";
 				problemSubmitHistory+="<th>학번</th>";
 				problemSubmitHistory+="<th>학생명</th>";
 				problemSubmitHistory+="<th>제출횟수</th>";
 				problemSubmitHistory+="<th>제출일시</th>";
-				problemSubmitHistory+="<th style='max-width: 150px;'>제출내용</th>";
+				problemSubmitHistory+="<th>제출내용</th>";
 				problemSubmitHistory+="<th>점수</th>";
 				problemSubmitHistory+="<th>피드백</th>";
 				problemSubmitHistory+="</tr>";
@@ -313,9 +320,14 @@ function fncInsertProblemForm(){
 
 function fncMakeProblemChatGPT() {
 	$('#profLoading').show();
-
+	
+	var selectWeek = Number($('#setWeek option:selected').val());
+	var range = weekInfo[selectWeek-1].weekCont;
+	var reqMsg = 'C++ 프로그래밍 문제를 생성해주세요.' + '문제 범위는 ' + range + '이고, 문제의 난이도는 ' + $('#setProblemLevel option:selected').val() + '으로 해주세요.' + makeProblemExample + JSON.stringify(problemObject);
+	console.log(reqMsg);
+	
 	var messages = [
-		{ role: 'system', content:  'C++ 프로그래밍 문제를 생성해주세요. 난이도는 ' + $('#setProblemLevel option:selected').val() + '으로 해주세요.' + makeProblemExample + JSON.stringify(problemObject)},
+		{ role: 'system', content: reqMsg },
 		{ role: 'user', content : '' },
 	]
 	

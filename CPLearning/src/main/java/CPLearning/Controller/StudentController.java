@@ -25,7 +25,7 @@ public class StudentController {
 	public List<ProblemInfo> getProblemType(HttpServletRequest request) {
 		List<ProblemInfo> problemInfo = studentMapper.getProblemType(); // USEYN = 'Y'인 문제유형 가져오기
 		
-		System.out.println("##### getProblemType ##### " + problemInfo);
+		//System.out.println("##### getProblemType ##### " + problemInfo);
 
 		return problemInfo;
 	}
@@ -40,7 +40,7 @@ public class StudentController {
 	public ProblemInfo getProblemInfo(ProblemInfo ProblemInfo, HttpServletRequest request) {
 		ProblemInfo problemInfo = studentMapper.getProblemInfo(ProblemInfo); // problemNo = 1 : 1번 문제 불러오기
 		
-		System.out.println("##### getProblemCont ##### " + problemInfo);
+		//System.out.println("##### getProblemCont ##### " + problemInfo);
 
 		return problemInfo;
 	}
@@ -50,7 +50,7 @@ public class StudentController {
 		
 		String submitCount = String.valueOf(studentMapper.getSubmitCount(SubmitHistory)+1);
 		SubmitHistory.setSubmitCount(submitCount);
-		System.out.println("##### insertSubmitHistory ##### " + SubmitHistory);
+		//System.out.println("##### insertSubmitHistory ##### " + SubmitHistory);
 		int cnt = studentMapper.insertSubmitHistory(SubmitHistory);
 		
 		return cnt;

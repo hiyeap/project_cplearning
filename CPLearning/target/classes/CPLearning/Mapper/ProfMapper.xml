@@ -27,7 +27,7 @@
 		<if test="problemLevel != null and problemLevel != '' ">
 		AND PROBLEMLEVEL = #{problemLevel}
 		</if>
-		ORDER BY PROBLEMNO
+		ORDER BY TO_NUMBER(PROBLEMNO)
 	</select>
 	
 	<select id="getSubmitHistory" resultType="CPLearning.Entity.SubmitHistory">

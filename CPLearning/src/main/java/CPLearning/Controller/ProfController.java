@@ -36,27 +36,27 @@ public class ProfController {
 	
 	@PostMapping("/getProfProblemInfo")
 	public List<ProblemInfo> getProfProblemInfo(ProblemInfo ProblemInfo, HttpServletRequest request) {
-		System.out.println("##### getProfProblemInfo START ##### ");
+		//System.out.println("##### getProfProblemInfo START ##### ");
 		List<ProblemInfo> profProblemInfo = profMapper.getProfProblemInfo(ProblemInfo); // 모든 문제정보 불러오기
-		System.out.println("##### getProfProblemInfo END ##### " + profProblemInfo);
+		//System.out.println("##### getProfProblemInfo END ##### " + profProblemInfo);
 
 		return profProblemInfo;
 	}
 	
 	@PostMapping("/getSubmitHistory")
 	public List<SubmitHistory> getSubmitHistory(SubmitHistory SubmitHistory, HttpServletRequest request) {
-		System.out.println("##### getSubmitHistory START ##### ");
+		//System.out.println("##### getSubmitHistory START ##### ");
 		List<SubmitHistory> submitHistory = profMapper.getSubmitHistory(SubmitHistory); // 학번에 따른 or 문제에 따른 제출정보 불러오기
-		System.out.println("##### getSubmitHistory END ##### " + submitHistory);
+		//System.out.println("##### getSubmitHistory END ##### " + submitHistory);
 
 		return submitHistory;
 	}
 	
 	@PostMapping("/getWeekInfo")
 	public List<WeekInfo> getWeekInfo(WeekInfo WeekInfo, HttpServletRequest request) {
-		System.out.println("##### getWeekInfo START ##### ");
+		//System.out.println("##### getWeekInfo START ##### ");
 		List<WeekInfo> weekInfo = profMapper.getWeekInfo(WeekInfo); // 학번에 따른 or 문제에 따른 제출정보 불러오기
-		System.out.println("##### getWeekInfo END ##### " + weekInfo);
+		//System.out.println("##### getWeekInfo END ##### " + weekInfo);
 
 		return weekInfo;
 	}

@@ -21,7 +21,7 @@ public class CommonController {
 	public List<ApiKeyInfo> getApiKey(HttpServletRequest request) {
 		
 		List<ApiKeyInfo> ApiKeyInfo = commonMapper.getApiKey();
-		System.out.println("#####" + ApiKeyInfo + "#####");
+		//System.out.println("#####" + ApiKeyInfo + "#####");
 		return ApiKeyInfo;
 	}
 
@@ -29,7 +29,7 @@ public class CommonController {
 	public StudentInfo studentLogin(StudentInfo StudentInfo, HttpServletRequest request) {
 		StudentInfo studentInfo = commonMapper.studentLogin(StudentInfo); // 학번,패스워드에 해당하는 조건에 맞는 select 결과를 저장
 		
-		System.out.println("#####" + studentInfo + "#####");
+		//System.out.println("#####" + studentInfo + "#####");
 
 		if (studentInfo != null) { // 해당 학생 정보가 있으면 
 			List<StudentInfo> loginHistorList = commonMapper.selectLoginHistory(studentInfo); // 위 학생의 로그인 이력을 select 결과를 저장
@@ -40,7 +40,7 @@ public class CommonController {
 			
 			studentInfo.setLoginIP(request.getRemoteAddr());
 			
-			System.out.println("##### insertLoginHistory ##### " + studentInfo);
+			//System.out.println("##### insertLoginHistory ##### " + studentInfo);
 			commonMapper.insertLoginHistory(studentInfo); // 학번,로그인IP와 함께 로그인 시간 저장
 			
 		}

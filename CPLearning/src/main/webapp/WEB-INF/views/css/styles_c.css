@@ -130,9 +130,9 @@ nav a:hover {
 }
 
 #problemSubmitHistory {
-    position: absolute;
-    top: 7%;
-    left: 7%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 수평 및 수직 중앙 정렬 */
     background-color: white;
     z-index: 1000;
     border: 1px solid #ccc; 
@@ -144,6 +144,9 @@ nav a:hover {
 }
 
 #closeBtn {
+    position: fixed;    /* 부모 요소에 대해 절대 위치 */
+    top: 10px;             /* 상단에서의 위치 */
+    right: 10px;           /* 오른쪽에서의 위치 */
     display: inline-block;
     width: 40px;           /* 버튼의 너비 */
     height: 40px;          /* 버튼의 높이 */
@@ -156,7 +159,7 @@ nav a:hover {
     cursor: pointer;        /* 커서 모양 변경 */
     font-size: 20px;       /* 글자 크기 */
     transition: background-color 0.3s; /* 배경색 변화 효과 */
-    z-index: 1;            /* 모달 본문보다 위에 표시 */
+    z-index: 1100;         /* 모달 본문보다 위에 표시 */
 }
 
 #closeBtn:hover {

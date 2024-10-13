@@ -58,7 +58,7 @@ function fncLogin() {
 					$(".prof-container").css("display", "block");
 					$("#student-nav").css("display", "none");
 					$(".student-container").css("display", "none");
-					fncInsertProblemForm();
+					fncGetWeekInfo();
 				} else {
 					$(".student-container").css("display", "flex");
 					$("#prof-nav").css("display", "none");
@@ -74,8 +74,6 @@ function fncLogin() {
 				alert("학번 또는 비밀번호를 다시 확인해주세요");
 			}
 			
-			
-
 		
 		},
 		error : function() {
