@@ -187,8 +187,7 @@ function fncSetProgress(){
 	for(var i = 0; i < weekInfo.length; i++){
 		setProgress+="<tr>";
 		setProgress+="<td>" + weekInfo[i].week + "</td>";
-		setProgress+="<td><input type='text' value='" + weekInfo[i].weekCont + "'></td>";
-		setProgress+="<td><button onclick=''>확인" + "</button></td>";
+		setProgress+="<td><input type='text' value='" + weekInfo[i].weekCont + "'><button onclick=''>확인" + "</button></td>";
 		setProgress+="</tr>";
 	}
 
@@ -222,7 +221,7 @@ function fncGetProfProblemInfo(){
 				profProblemInfo+="<th>테스트케이스</th>";
 				profProblemInfo+="<th>문제힌트</th>"; */
 				profProblemInfo+="<th>피드백기한</th>";
-				profProblemInfo+="<th>마감기한</th>";
+				profProblemInfo+="<th>제출기한</th>";
 				profProblemInfo+="<th>수정</th>";
 				profProblemInfo+="<th>삭제</th>";
 				profProblemInfo+="</tr>";
